@@ -20,7 +20,7 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
   "include": [
-    "backend/src/**/*",
-    "backend/index.ts"
+    "src/**/*",
+    "src/**/*.json",
   ]
 }
