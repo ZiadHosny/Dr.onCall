@@ -7,6 +7,8 @@ import { catchAsyncError } from "../../utils/AppError.js"
 import { sendEmail } from "../../utils/email/sendEmail.js"
 import { AppError } from "../../utils/AppError.js"
 import { sendResponse } from "../../utils/response.js"
+import { AuthRequest } from "../../utils/types.js"
+import { APP_NAME, ROUNDS } from "../../utils/constants.js"
 
 export const signUp = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
 
@@ -18,7 +20,7 @@ export const signUp = catchAsyncError(async (req: Request, res: Response, next: 
     } else {
         bcrypt.hash(password, rounds, async (err, hash) => {
             if (err) {
-                return res.json({ message: 'error when hashing password', err })
+                return next(new AppError('error when hashing password', 400))
             }
             await userModel.insertMany({
                 name,
@@ -28,7 +30,7 @@ export const signUp = catchAsyncError(async (req: Request, res: Response, next: 
             })
 
             const token = jwt.sign({ email }, secretKey)
-            const emailMessage = await sendEmail({ userEmail: email, token, subject: "Verification From Blood Donation App" })
+            const emailMessage = await sendEmail({ userEmail: email, token, subject: `Verification From ${APP_NAME} App` })
 
             sendResponse({
                 res,
@@ -47,12 +49,19 @@ export const signIn = catchAsyncError(async (req: Request, res: Response, next: 
     const user = await userModel.findOne({ email })
 
     if (user) {
-        const match = await bcrypt.compare(password, user?.password)
+        const match = await bcrypt.compare(password, user.password)
 
         const { _id: userId, name, isVerified, isActive, type } = user
 
         if (match) {
-            const token = jwt.sign({ userId, name, isVerified }, secretKey)
+            const token = jwt.sign({
+                userId,
+                name,
+                isVerified,
+                password: user.password,
+                email,
+                type,
+            }, secretKey)
 
             if (isVerified && isActive) {
                 sendResponse({
@@ -71,7 +80,6 @@ export const signIn = catchAsyncError(async (req: Request, res: Response, next: 
             } else {
                 next(new AppError("Confirm Your Email First", 400))
             }
-
         }
         else {
             next(new AppError("Password Incorrect", 400))
@@ -94,10 +102,28 @@ export const emailVerify = catchAsyncError(async (req: Request, res: Response, n
             const user = await userModel.findOne({ email })
             if (user) {
                 await userModel.findOneAndUpdate({ email }, { isVerified: true })
-                res.json({ message: "Email Verified" })
+                sendResponse({ res, status: 200, message: "Email Verified" })
             } else {
-                res.json({ message: "Email Not found" })
+                return next(new AppError("Email Not found", 400))
             }
         }
     })
+})
+
+export const changePassword = catchAsyncError(async (req: AuthRequest, res: Response, next: NextFunction) => {
+    const { password, newPassword } = req.body
+    const { userId } = req.user
+
+    // Verify current password
+    const isPasswordValid = await bcrypt.compare(password, req.user.password);
+    if (!isPasswordValid) {
+        return next(new AppError("Current password is incorrect", 400))
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, ROUNDS);
+
+    await userModel.findByIdAndUpdate(userId, { password: hashedPassword })
+
+    return sendResponse({ res, status: 201, message: "Password changed successfully" })
 })

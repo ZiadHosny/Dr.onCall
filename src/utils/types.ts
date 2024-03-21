@@ -1,3 +1,17 @@
+import { Request } from "express";
+
+export interface AuthRequest extends Request {
+    user: {
+        userId: string,
+        name: string,
+        isVerified: boolean,
+        password: string,
+        iat: number,
+        email: string,
+        type: "doctor" | "user",
+    }
+}
+
 export type User = {
     name: string,
     email: string,

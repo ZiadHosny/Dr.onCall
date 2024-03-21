@@ -5,7 +5,7 @@ type SendResponseType = {
     status: number,
     message: string,
     page?: number,
-    data: any
+    data?: any
 }
 
 export const sendResponse = ({ res, status, message, page, data }: SendResponseType) => {

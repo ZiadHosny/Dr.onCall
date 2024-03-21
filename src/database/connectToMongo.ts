@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcrypt'
 import { getFromEnv } from "../utils/getFromEnv.js";
-import { logErrMsg, logErrInfoMsg, logSuccessMsg, logBlueMsg } from "../utils/console/log.js";
+import { logErrMsg, logErrInfoMsg, logSuccessMsg } from "../utils/console/log.js";
 import { userModel } from "../models/user.model.js";
 import { ROUNDS } from '../utils/constants.js'
 

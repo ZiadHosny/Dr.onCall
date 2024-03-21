@@ -16,3 +16,9 @@ export const loginSchema = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().required(),
 })
+
+export const changePasswordSchema = Joi.object({
+    password: Joi.string().required(),
+    newPassword: Joi.string().required(),
+    confirmNewPassword: Joi.string().required().valid(Joi.ref('newPassword')),
+})

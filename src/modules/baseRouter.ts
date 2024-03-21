@@ -1,5 +1,5 @@
 import * as express from "express";
-import { APP_NAME, BLOOD_TYPES } from "../utils/constants.js";
+import { APP_NAME} from "../utils/constants.js";
 
 const baseRouter = express.Router()
 
