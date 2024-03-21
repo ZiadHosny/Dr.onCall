@@ -26,6 +26,9 @@ app.use('/api', baseRouter)
 app.use('/api/users', userRouter)
 app.use('/api/messages', messageRouter)
 
+app.use('/', (req, res) => {
+    res.redirect('/api');
+})
 // default Routes
 app.use('*', invalidRouter)
 app.use(globalErrorMiddleware)
