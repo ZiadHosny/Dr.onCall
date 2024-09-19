@@ -22,25 +22,13 @@ if (mode == "dev") {
 }
 
 //routes
+app.use('/', baseRouter)
 app.use('/api', baseRouter)
 app.use('/api/users', userRouter)
 app.use('/api/messages', messageRouter)
 
-app.use('/', (req, res) => {
-    res.redirect('/api');
-})
 // default Routes
 app.use('*', invalidRouter)
 app.use(globalErrorMiddleware)
 
 export const router = app
-
-// if (mode === 'prod') {
-//     const __dirname = path.resolve();
-
-//     app.use(express.static(path.join(__dirname, '/frontend/build')));
-
-//     app.get('*', (req, res) =>
-//         res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
-//     );
-// }
