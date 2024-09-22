@@ -7,7 +7,6 @@ import { APP_NAME } from './utils/constants.js';
 import { initSocket } from './database/iOConnection.js';
 import http from 'http';
 import { useAutomation } from './automations/corn.js';
-import { StatusCodes } from 'http-status-codes';
 
 const { port } = getFromEnv();
 const app = express();
