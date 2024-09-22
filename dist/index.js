@@ -6,6 +6,7 @@ import router from './router.js';
 import { APP_NAME } from './utils/constants.js';
 import { initSocket } from './database/iOConnection.js';
 import http from 'http';
+// import { useAutomation } from './automations/corn.js';
 const { port } = getFromEnv();
 const app = express();
 const server = http.createServer(app);
