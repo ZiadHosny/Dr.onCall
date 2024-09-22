@@ -1,25 +1,33 @@
 import { NextFunction, Request, Response } from "express"
 import { getFromEnv } from "../utils/getFromEnv.js"
+import { AppErrorType } from "../utils/AppError.js";
+import { sendLocalizedResponse } from "../utils/response.js";
 
-export const globalErrorMiddleware = (err: any, _: Request, res: Response, __: NextFunction) => {
-    const { mode } = getFromEnv()
+export const globalErrorMiddleware = (err: AppErrorType, req: Request, res: Response, __: NextFunction) => {
+    const { mode } = getFromEnv();
+
     if (mode == 'dev') {
-        devMode(err, res)
+        devMode(err, req, res)
     } else {
-        prodMode(err, res)
+        prodMode(err, req, res)
     }
 }
 
-const prodMode = (err: any, res: Response) => {
-    const statusCode = err.statusCode || 500
-    res.status(statusCode).json({ message: err.message })
+const prodMode = (err: AppErrorType, req: Request, res: Response) => {
+
+    sendLocalizedResponse({
+        message: err.localizedMessage,
+        res,
+        req,
+        status: err.statusCode,
+    });
 }
 
-const devMode = (err: any, res: Response) => {
-    const statusCode = err.statusCode || 500
-    res.status(statusCode).json({
-        message: err.message,
-        status: statusCode,
-        // stack: err.stack
-    })
+const devMode = (err: AppErrorType, req: Request, res: Response) => {
+    sendLocalizedResponse({
+        message: err.localizedMessage,
+        res,
+        req,
+        status: err.statusCode,
+    });
 }

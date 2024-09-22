@@ -1,11 +1,10 @@
-import { NextFunction, Request, Response } from "express"
+import { ErrorRequestHandler } from "express";
+import { LangType } from "./types.js";
 
-export const catchAsyncError = (fn: Function) => {
-    return (req: Request, res: Response, next: NextFunction) => {
-        fn(req, res, next).catch((err: any) => {
-            next(err)
-        })
-    }
+export interface AppErrorType extends ErrorRequestHandler {
+    localizedMessage: LangType,
+    details?: any,
+    statusCode: number,
 }
 
 export class AppError extends Error {
@@ -13,7 +12,19 @@ export class AppError extends Error {
     details: any;
     constructor(message: string, statusCode: number, details?: any) {
         super(message)
-        this.statusCode = statusCode
+        this.statusCode = statusCode ?? 500
+        this.details = details
+    }
+}
+
+export class AppLocalizedError extends Error {
+    statusCode: number = 500
+    details: any;
+    localizedMessage: LangType;
+    constructor(message: LangType, statusCode?: number, details?: any) {
+        super(message.en)
+        this.localizedMessage = message
+        this.statusCode = statusCode ?? 500
         this.details = details
     }
 }

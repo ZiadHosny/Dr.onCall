@@ -1,4 +1,4 @@
-import * as express from "express";
+import { Router, Response } from "express";
 import { APP_NAME } from "../utils/constants.js";
 
 const htmlContent = `
@@ -32,10 +32,10 @@ const htmlContent = `
 </html>
 `;
 
-const baseRouter = express.Router()
+const router = Router()
 
-baseRouter.get('/', (_, res: express.Response) => {
-    res.send(htmlContent)
+router.get('/', (_, res: Response) => {
+  res.send(htmlContent)
 })
 
-export default baseRouter
+export const baseRouter = router

@@ -1,30 +1,6 @@
-import { Request } from "express";
-
-export interface AuthRequest extends Request {
-    user: {
-        userId: string,
-        name: string,
-        isVerified: boolean,
-        password: string,
-        iat: number,
-        email: string,
-        type: "doctor" | "user",
-    }
-}
-
-export type User = {
-    name: string,
-    email: string,
-    password: string,
-    phone: string,
-    type: "doctor" | "user",
-    isActive: boolean,
-    isVerified: boolean,
-
-
-    // gender: "Male" | "Female",
-    // bloodType: String,
-    // dateOfBirth: number,
+export interface LangType {
+    ar: string,
+    en: string,
 }
 
 export type EmailData = {
@@ -35,9 +11,4 @@ export type EmailData = {
 
 export type EmailHtml = {
     token: string,
-}
-
-export type Message = {
-    message: string,
-    userId: string,
 }

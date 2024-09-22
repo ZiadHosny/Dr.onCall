@@ -1,8 +1,10 @@
-import { NextFunction, Request, Response } from 'express'
+import { NextFunction, Response } from 'express'
 import jwt from 'jsonwebtoken'
 import { getFromEnv } from '../utils/getFromEnv.js'
-import { AppError, catchAsyncError } from '../utils/AppError.js'
-import { AuthRequest } from '../utils/types.js'
+import { AppLocalizedError } from '../utils/AppError.js'
+import { catchAsyncError } from '../utils/catchAsyncError.js'
+import { StatusCodes } from 'http-status-codes'
+import { AuthRequest } from '../modules/user/user.interface.js'
 
 export const auth = catchAsyncError(async (req: AuthRequest, res: Response, next: NextFunction) => {
 
@@ -10,13 +12,25 @@ export const auth = catchAsyncError(async (req: AuthRequest, res: Response, next
     const token = req.headers['authorization']?.split('Bearer ')[1]
 
     if (!token) {
-        return next(new AppError('Not authorized, no token', 401))
+        return next(new AppLocalizedError(
+            {
+                ar: "غير مصرح، لا يوجد رمز.",
+                en: "Not authorized, no token."
+            },
+            StatusCodes.UNAUTHORIZED
+        ))
     }
 
     try {
         jwt.verify(token, secretKey, (err: any, decode: any) => {
             if (err) {
-                return next(new AppError(err, 401))
+                return next(new AppLocalizedError(
+                    {
+                        ar: "رمز التحقق غير صالح.",
+                        en: "Verification token is invalid.",
+                    },
+                    StatusCodes.UNAUTHORIZED
+                ))
             }
             else if (decode) {
                 req.user = decode
@@ -24,7 +38,12 @@ export const auth = catchAsyncError(async (req: AuthRequest, res: Response, next
             }
         })
     } catch (err) {
-        console.error(err);
-        return next(new AppError('Not authorized, token failed', 401))
+        return next(new AppLocalizedError(
+            {
+                ar: "رمز التحقق غير صالح.",
+                en: "Verification token is invalid.",
+            },
+            StatusCodes.UNAUTHORIZED
+        ))
     }
 })

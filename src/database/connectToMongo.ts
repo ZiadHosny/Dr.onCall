@@ -24,7 +24,6 @@ const createAdmin = async () => {
 }
 
 export const connectToMongoDb = async () => {
-
     const { mongoDBUrl } = getFromEnv()
 
     try {
