@@ -1,22 +1,27 @@
 import { getFromEnv } from "../utils/getFromEnv.js";
-export const globalErrorMiddleware = (err, _, res, __) => {
+import { sendLocalizedResponse } from "../utils/response.js";
+export const globalErrorMiddleware = (err, req, res, __) => {
     const { mode } = getFromEnv();
     if (mode == 'dev') {
-        devMode(err, res);
+        devMode(err, req, res);
     }
     else {
-        prodMode(err, res);
+        prodMode(err, req, res);
     }
 };
-const prodMode = (err, res) => {
-    const statusCode = err.statusCode || 500;
-    res.status(statusCode).json({ message: err.message });
+const prodMode = (err, req, res) => {
+    sendLocalizedResponse({
+        message: err.localizedMessage,
+        res,
+        req,
+        status: err.statusCode,
+    });
 };
-const devMode = (err, res) => {
-    const statusCode = err.statusCode || 500;
-    res.status(statusCode).json({
-        message: err.message,
-        status: statusCode,
-        // stack: err.stack
+const devMode = (err, req, res) => {
+    sendLocalizedResponse({
+        message: err.localizedMessage,
+        res,
+        req,
+        status: err.statusCode,
     });
 };
