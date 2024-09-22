@@ -1,16 +1,16 @@
-import { getFromEnv } from "../getFromEnv.js"
-import { EmailHtml } from "../types.js"
-import { APP_LINK, APP_NAME, APP_IMG } from "../constants.js"
+import { getFromEnv } from '../getFromEnv.js';
+import { EmailHtml } from '../types.js';
+import { APP_LINK, APP_NAME, APP_IMG } from '../constants.js';
 
 export const emailHtml = ({ token }: EmailHtml) => {
-
-  const { baseUrlWithPort } = getFromEnv()
-  const verifyUrl = `${baseUrlWithPort}/users/verify/${token}`
-  const appName = APP_NAME
-  const appUrl = APP_LINK
-  const appImg = APP_IMG
-  const emailHeader = "Confirm Your Email Address"
-  const emailFooter = "You received this email because we received a request for [type_of_action] for your account. If you didn't request [type_of_action] you can safely delete this email."
+  const { baseUrlWithPort } = getFromEnv();
+  const verifyUrl = `${baseUrlWithPort}/users/verify/${token}`;
+  const appName = APP_NAME;
+  const appUrl = APP_LINK;
+  const appImg = APP_IMG;
+  const emailHeader = 'Confirm Your Email Address';
+  const emailFooter =
+    "You received this email because we received a request for [type_of_action] for your account. If you didn't request [type_of_action] you can safely delete this email.";
   return `
     <!DOCTYPE html>
     <html>
@@ -184,5 +184,5 @@ export const emailHtml = ({ token }: EmailHtml) => {
       </table>
     </body>
     </html>
-    `
-}
+    `;
+};

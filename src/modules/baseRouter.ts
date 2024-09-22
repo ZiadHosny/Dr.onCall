@@ -1,5 +1,5 @@
-import { Router, Response } from "express";
-import { APP_NAME } from "../utils/constants.js";
+import { Router, Response } from 'express';
+import { APP_NAME } from '../utils/constants.js';
 
 const htmlContent = `
 <!DOCTYPE html>
@@ -32,10 +32,10 @@ const htmlContent = `
 </html>
 `;
 
-const router = Router()
+const router = Router();
 
 router.get('/', (_, res: Response) => {
-  res.send(htmlContent)
-})
+  res.send(htmlContent);
+});
 
-export const baseRouter = router
+export const baseRouter = router;

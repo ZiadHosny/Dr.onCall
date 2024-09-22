@@ -2,25 +2,22 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "NodeNext",
-    "rootDir": "./src", /* Specify the root folder within your source files. */
-    "moduleResolution": "NodeNext", /* Specify how TypeScript looks up a file from a given module specifier. */
+    "rootDir": "./src" /* Specify the root folder within your source files. */,
+    "moduleResolution": "NodeNext" /* Specify how TypeScript looks up a file from a given module specifier. */,
     // "baseUrl": "./",                                  /* Specify the base directory to resolve non-relative module names. */
-    "paths": {}, /* Specify a set of entries that re-map imports to additional lookup locations. */ /* Conditions to set in addition to the resolver-specific defaults when resolving imports. */
-    "resolveJsonModule": true, /* Enable importing .json files. */
+    "paths": {} /* Specify a set of entries that re-map imports to additional lookup locations. */ /* Conditions to set in addition to the resolver-specific defaults when resolving imports. */,
+    "resolveJsonModule": true /* Enable importing .json files. */,
     /* Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output. */
-    "outDir": "dist", /* Specify an output folder for all emitted files. */ /* Allow 'import x from y' when a module doesn't have a default export. */
-    "esModuleInterop": true, /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
+    "outDir": "dist" /* Specify an output folder for all emitted files. */ /* Allow 'import x from y' when a module doesn't have a default export. */,
+    "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
     // "preserveSymlinks": true,                         /* Disable resolving symlinks to their realpath. This correlates to the same flag in node. */
-    "forceConsistentCasingInFileNames": true, /* Ensure that casing is correct in imports. */
+    "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
     /* Type Checking */
-    "strict": true, /* Enable all strict type-checking options. */
+    "strict": true /* Enable all strict type-checking options. */,
     // "noImplicitAny": true,                            /* Enable error reporting for expressions and declarations with an implied 'any' type. */
-    "strictNullChecks": true, /* When type checking, take into account 'null' and 'undefined'. */
+    "strictNullChecks": true /* When type checking, take into account 'null' and 'undefined'. */,
     /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  "include": [
-    "src/**/*",
-    "src/**/*.json",
-  ]
+  "include": ["src/**/*", "src/**/*.json"]
 }

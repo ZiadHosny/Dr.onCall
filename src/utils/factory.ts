@@ -1,19 +1,19 @@
-import { Model } from "mongoose";
-import { catchAsyncError } from "./catchAsyncError.js";
-import { NextFunction, Response, Request } from "express";
-import { StatusCodes } from "http-status-codes";
-import { sendLocalizedResponse } from "./response.js";
-import { AppLocalizedError } from "./AppError.js";
-import { ApiFeature } from "./ApiFeature.js";
+import { Model } from 'mongoose';
+import { catchAsyncError } from './catchAsyncError.js';
+import { NextFunction, Response, Request } from 'express';
+import { StatusCodes } from 'http-status-codes';
+import { sendLocalizedResponse } from './response.js';
+import { AppLocalizedError } from './AppError.js';
+import { ApiFeature } from './ApiFeature.js';
 
 export interface IQuery {
-    sort?: string;
-    limit?: string;
-    page?: string;
-    fields?: string;
-    populate?: string;
-    keyword?: { [key: string]: string };
-    [key: string]: string | string[] | { [key: string]: string } | undefined;
+  sort?: string;
+  limit?: string;
+  page?: string;
+  fields?: string;
+  populate?: string;
+  keyword?: { [key: string]: string };
+  [key: string]: string | string[] | { [key: string]: string } | undefined;
 }
 
 // @desc    Get All Items
@@ -84,212 +84,209 @@ export interface IQuery {
 
 // @desc    Create New Item
 // @route   POST /api/v1/......
-// @access  Private 
+// @access  Private
 const createNewItem = <T>(Model: Model<T>) =>
-    catchAsyncError(
-        async (req: Request, res: Response, next: NextFunction) => {
-            // 1- take data from request body
-            const data = req.body;
+  catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    // 1- take data from request body
+    const data = req.body;
 
-            // 2- create new document in mongooseDB
-            const document = await Model.create(data);
+    // 2- create new document in mongooseDB
+    const document = await Model.create(data);
 
-            // 3- send response
-            return sendLocalizedResponse({
-                req,
-                res,
-                message: {
-                    en: "Created Successfully",
-                    ar: "تم الانشاء بنجاح",
-                },
-                status: StatusCodes.CREATED,
-                data: document
-            })
-        }
-    );
+    // 3- send response
+    return sendLocalizedResponse({
+      req,
+      res,
+      message: {
+        en: 'Created Successfully',
+        ar: 'تم الانشاء بنجاح',
+      },
+      status: StatusCodes.CREATED,
+      data: document,
+    });
+  });
 
 // @desc    Get Specific Item By Id
 // @route   GET /api/v1/......
 // @access  Public
-const getOneItemById = <T>(Model: Model<T>, populate: string[] = [""], fields: string = "-__v") =>
-    catchAsyncError(
-        async (req: Request, res: Response, next: NextFunction) => {
-            // 1- get id of item from params
-            const { id } = req.params;
-            // 2- find document from mongooseDB
-            const query = Model.findById(id).select(fields);
-            // 3- get document
-            const document =
-                populate?.length > 0 && populate[0] !== ""
-                    ? await query.populate(populate)
-                    : await query;
+const getOneItemById = <T>(
+  Model: Model<T>,
+  populate: string[] = [''],
+  fields: string = '-__v',
+) =>
+  catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    // 1- get id of item from params
+    const { id } = req.params;
+    // 2- find document from mongooseDB
+    const query = Model.findById(id).select(fields);
+    // 3- get document
+    const document =
+      populate?.length > 0 && populate[0] !== ''
+        ? await query.populate(populate)
+        : await query;
 
-            // 4- check if document not found
-            if (!document) {
-                return next(
-                    new AppLocalizedError(
-                        {
-                            en: `Not Found Any Result For This Id: ${id}`,
-                            ar: `${id} : id لا يوجد اي نتيجة بهذا باستخدم`,
-                        },
-                        StatusCodes.NOT_FOUND
-                    )
-                );
-            }
+    // 4- check if document not found
+    if (!document) {
+      return next(
+        new AppLocalizedError(
+          {
+            en: `Not Found Any Result For This Id: ${id}`,
+            ar: `${id} : id لا يوجد اي نتيجة بهذا باستخدم`,
+          },
+          StatusCodes.NOT_FOUND,
+        ),
+      );
+    }
 
-            // 5- send response
-            return sendLocalizedResponse({
-                req,
-                res,
-                status: StatusCodes.OK,
-                message: {
-                    en: "Found Successfully",
-                    ar: "تم العثور بنجاح",
-                },
-                data: document
-            });
-        }
-    );
+    // 5- send response
+    return sendLocalizedResponse({
+      req,
+      res,
+      status: StatusCodes.OK,
+      message: {
+        en: 'Found Successfully',
+        ar: 'تم العثور بنجاح',
+      },
+      data: document,
+    });
+  });
 
 // @desc    Get Specific Item By Slug
 // @route   GET /api/v1/......
 // @access  Public
-const getOneItemBySlug = <T>(Model: Model<T>, populate: string[] = [""], fields: string = "-__v") =>
-    catchAsyncError(
-        async (req: Request, res: Response, next: NextFunction) => {
-            // 1- get id of item from params
-            const { slug } = req.body;
+const getOneItemBySlug = <T>(
+  Model: Model<T>,
+  populate: string[] = [''],
+  fields: string = '-__v',
+) =>
+  catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    // 1- get id of item from params
+    const { slug } = req.body;
 
-            // 2- find document from mongooseDB
-            let query = Model.findOne({ slug }).select(fields);
+    // 2- find document from mongooseDB
+    let query = Model.findOne({ slug }).select(fields);
 
-            // 3- get document
-            const document =
-                populate?.length > 0 && populate[0] !== ""
-                    ? await query.populate(populate)
-                    : await query;
+    // 3- get document
+    const document =
+      populate?.length > 0 && populate[0] !== ''
+        ? await query.populate(populate)
+        : await query;
 
-            // 4- check if document not found
-            if (!document) {
-                return next(
-                    new AppLocalizedError(
-                        {
-                            en: `Not Found Any Result For This slug : ${slug}`,
-                            ar: `${slug} : slug لا يوجد اي نتيجة بهذا باستخدم`,
+    // 4- check if document not found
+    if (!document) {
+      return next(
+        new AppLocalizedError(
+          {
+            en: `Not Found Any Result For This slug : ${slug}`,
+            ar: `${slug} : slug لا يوجد اي نتيجة بهذا باستخدم`,
+          },
+          StatusCodes.NOT_FOUND,
+        ),
+      );
+    }
 
-                        },
-                        StatusCodes.NOT_FOUND
-                    )
-                );
-            }
-
-            // 5- send response
-            return sendLocalizedResponse({
-                req,
-                res,
-                status: StatusCodes.OK,
-                message: {
-                    en: "Found Successfully",
-                    ar: "تم العثور بنجاح",
-                },
-                data: document
-            });
-        }
-    );
+    // 5- send response
+    return sendLocalizedResponse({
+      req,
+      res,
+      status: StatusCodes.OK,
+      message: {
+        en: 'Found Successfully',
+        ar: 'تم العثور بنجاح',
+      },
+      data: document,
+    });
+  });
 
 // @desc    Update Specific Item
 // @route   PUT    /api/v1/.....
 // @access  Private
-const updateOneItemById = <T>(Model: Model<T>, populate: string[] = [""]) =>
-    catchAsyncError(
-        async (req: Request, res: Response, next: NextFunction) => {
-            // 1- get id for item from params
-            const { id } = req.params;
+const updateOneItemById = <T>(Model: Model<T>, populate: string[] = ['']) =>
+  catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    // 1- get id for item from params
+    const { id } = req.params;
 
-            // 2- find item and update in mongooseDB
-            const query = Model.findByIdAndUpdate(id, req.body, {
-                new: true,
-            });
+    // 2- find item and update in mongooseDB
+    const query = Model.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
 
-            // 3- get document
-            const document =
-                populate?.length > 0 && populate[0] !== ""
-                    ? await query.populate(populate)
-                    : await query;
+    // 3- get document
+    const document =
+      populate?.length > 0 && populate[0] !== ''
+        ? await query.populate(populate)
+        : await query;
 
-            // 3- check if document not found
-            if (!document) {
-                return next(
-                    new AppLocalizedError(
-                        {
-                            en: `Not Found Any Result For This Id ${id}`,
-                            ar: `${id}لا يوجداي نتيجة لهذا`,
-                        },
-                        StatusCodes.NOT_FOUND
-                    )
-                );
-            }
+    // 3- check if document not found
+    if (!document) {
+      return next(
+        new AppLocalizedError(
+          {
+            en: `Not Found Any Result For This Id ${id}`,
+            ar: `${id}لا يوجداي نتيجة لهذا`,
+          },
+          StatusCodes.NOT_FOUND,
+        ),
+      );
+    }
 
-            // 4- save update
-            await document.save();
+    // 4- save update
+    await document.save();
 
-            // 5- send response
-            return sendLocalizedResponse({
-                req,
-                res,
-                status: StatusCodes.OK,
-                message: {
-                    en: "Updated Successfully",
-                    ar: "تم التعديل بنجاح",
-                },
-                data: document
-            });
-        }
-    );
+    // 5- send response
+    return sendLocalizedResponse({
+      req,
+      res,
+      status: StatusCodes.OK,
+      message: {
+        en: 'Updated Successfully',
+        ar: 'تم التعديل بنجاح',
+      },
+      data: document,
+    });
+  });
 
 // @desc    Delete Specific Item
 // @route   DELETE    /api/v1/.....
 // @access  Private
 const deleteOneItemById = <T>(Model: Model<T>) =>
-    catchAsyncError(
-        async (req: Request, res: Response, next: NextFunction) => {
-            // 1- get id for item from params
-            const { id } = req.params;
+  catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    // 1- get id for item from params
+    const { id } = req.params;
 
-            // 2- find item and delete in mongooseDB
-            const document = await Model.findByIdAndDelete(id);
+    // 2- find item and delete in mongooseDB
+    const document = await Model.findByIdAndDelete(id);
 
-            // 3- check if item deleted
-            if (!document) {
-                return next(
-                    new AppLocalizedError(
-                        {
-                            en: `Not Found Any Result For This Id ${id}`,
-                            ar: `${id}لا يوجداي نتيجة لهذا`,
-                        },
-                        StatusCodes.NOT_FOUND
-                    )
-                );
-            }
+    // 3- check if item deleted
+    if (!document) {
+      return next(
+        new AppLocalizedError(
+          {
+            en: `Not Found Any Result For This Id ${id}`,
+            ar: `${id}لا يوجداي نتيجة لهذا`,
+          },
+          StatusCodes.NOT_FOUND,
+        ),
+      );
+    }
 
-            // 4- send response
-            return sendLocalizedResponse({
-                req,
-                res,
-                status: StatusCodes.OK,
-                message: {
-                    en: "Deleted Successfully",
-                    ar: "تم الحذف بنجاح",
-                },
-                data: document
-            });
-        }
-    );
+    // 4- send response
+    return sendLocalizedResponse({
+      req,
+      res,
+      status: StatusCodes.OK,
+      message: {
+        en: 'Deleted Successfully',
+        ar: 'تم الحذف بنجاح',
+      },
+      data: document,
+    });
+  });
 
 export const Factory = {
-    createNewItem,
-    getOneItemById,
-    getOneItemBySlug,
-    updateOneItemById,
-    deleteOneItemById,
-}
+  createNewItem,
+  getOneItemById,
+  getOneItemBySlug,
+  updateOneItemById,
+  deleteOneItemById,
+};

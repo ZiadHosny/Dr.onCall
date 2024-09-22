@@ -1,14 +1,14 @@
 export interface LangType {
-    ar: string,
-    en: string,
+  ar: string;
+  en: string;
 }
 
 export type EmailData = {
-    userEmail: string;
-    subject: string;
-    token: string
-}
+  userEmail: string;
+  subject: string;
+  token: string;
+};
 
 export type EmailHtml = {
-    token: string,
-}
+  token: string;
+};
