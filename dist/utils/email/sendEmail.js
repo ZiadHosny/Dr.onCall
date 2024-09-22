@@ -8,8 +8,8 @@ export const sendEmail = async ({ userEmail, token, subject }) => {
         service: emailService,
         auth: {
             user: email,
-            pass
-        }
+            pass,
+        },
     });
     let mailMessage = 'Message Not Sended Successfully';
     await new Promise((resolve, reject) => {
@@ -23,7 +23,7 @@ export const sendEmail = async ({ userEmail, token, subject }) => {
                 logErrInfoMsg(err);
                 reject({
                     mailMessage,
-                    err
+                    err,
                 });
             }
             else {

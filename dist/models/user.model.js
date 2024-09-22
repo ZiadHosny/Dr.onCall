@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model } from 'mongoose';
 const userSchema = new Schema({
     name: {
         type: String,
@@ -33,7 +33,7 @@ const userSchema = new Schema({
     type: {
         type: String,
         enum: ['doctor', 'user'],
-        default: 'user'
+        default: 'user',
     },
     // gender: {
     //     type: String,

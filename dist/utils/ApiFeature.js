@@ -16,18 +16,21 @@ export class ApiFeature {
         this.mongooseQuery.skip(skip).limit(5);
         return this;
     }
-    filter() {
-        let filterObj = { ...this.queryString };
-        const excludedQuery = ['page', 'sort', 'fields', 'keyword'];
-        excludedQuery.forEach((q) => {
-            delete filterObj[q];
-        });
-        let filterObjJson = JSON.stringify(filterObj);
-        filterObjJson = filterObjJson.replace(/\b(gt|gte|lt|lte)\b/g, match => `$${match}`);
-        filterObj = JSON.parse(filterObjJson);
-        this.mongooseQuery.find(filterObj);
-        return this;
-    }
+    // filter() {
+    //   let filterObj = { ...this.queryString };
+    //   const excludedQuery = ['page', 'sort', 'fields', 'keyword'];
+    //   excludedQuery.forEach((q) => {
+    //     delete filterObj[q];
+    //   });
+    //   let filterObjJson = JSON.stringify(filterObj);
+    //   filterObjJson = filterObjJson.replace(
+    //     /\b(gt|gte|lt|lte)\b/g,
+    //     (match) => `$${match}`,
+    //   );
+    //   filterObj = JSON.parse(filterObjJson);
+    //   this.mongooseQuery.find(filterObj);
+    //   return this;
+    // }
     sort() {
         const sort = this.queryString.sort;
         if (sort) {
@@ -44,8 +47,8 @@ export class ApiFeature {
                     {
                         name: { $regex: keyword, $options: 'i' },
                         // description: { $regex: keyword, $options: 'i' }
-                    }
-                ]
+                    },
+                ],
             });
         }
         return this;
@@ -53,7 +56,7 @@ export class ApiFeature {
     fields() {
         const fields = this.queryString.fields;
         if (fields) {
-            const select = fields.split(",").join(" ");
+            const select = fields.split(',').join(' ');
             this.mongooseQuery.select(select);
         }
         return this;

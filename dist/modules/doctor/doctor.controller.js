@@ -1,12 +1,12 @@
 import * as bcrypt from 'bcrypt';
-import { AppLocalizedError } from "../../utils/AppError.js";
-import { DoctorModel } from "../../models/doctor.model.js";
-import { userModel } from "../../models/user.model.js";
-import { getFromEnv } from "../../utils/getFromEnv.js";
-import { sendLocalizedResponse } from "../../utils/response.js";
-import { StatusCodes } from "http-status-codes";
-import { Factory } from "../../utils/factory.js";
-import { catchAsyncError } from "../../utils/catchAsyncError.js";
+import { AppLocalizedError } from '../../utils/AppError.js';
+import { DoctorModel } from '../../models/doctor.model.js';
+import { userModel } from '../../models/user.model.js';
+import { getFromEnv } from '../../utils/getFromEnv.js';
+import { sendLocalizedResponse } from '../../utils/response.js';
+import { StatusCodes } from 'http-status-codes';
+import { Factory } from '../../utils/factory.js';
+import { catchAsyncError } from '../../utils/catchAsyncError.js';
 export const addDoctor = catchAsyncError(async (req, res, next) => {
     const { name, email, password, phone, imageUrl, specialty, rating } = req.body;
     const { rounds } = getFromEnv();
@@ -14,15 +14,15 @@ export const addDoctor = catchAsyncError(async (req, res, next) => {
     if (user) {
         next(new AppLocalizedError({
             ar: 'الحساب موجود بالفعل. يرجى تسجيل الدخول أو إعادة تعيين كلمة المرور.',
-            en: "Account already exists. Please log in or reset your password."
+            en: 'Account already exists. Please log in or reset your password.',
         }, StatusCodes.CONFLICT));
     }
     else {
         bcrypt.hash(password, rounds, async (err, hash) => {
             if (err) {
                 return next(new AppLocalizedError({
-                    ar: "حدث خطأ أثناء تشفير كلمة المرور. يرجى المحاولة لاحقًا.",
-                    en: "An error occurred while hashing the password. Please try again later."
+                    ar: 'حدث خطأ أثناء تشفير كلمة المرور. يرجى المحاولة لاحقًا.',
+                    en: 'An error occurred while hashing the password. Please try again later.',
                 }));
             }
             const user = await userModel.create({
@@ -46,7 +46,7 @@ export const addDoctor = catchAsyncError(async (req, res, next) => {
                 message: {
                     ar: 'تم اضافة الدكتور بنجاح',
                     en: 'Doctor Added Successfully',
-                }
+                },
             });
         });
     }

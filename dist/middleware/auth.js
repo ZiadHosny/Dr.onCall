@@ -8,16 +8,16 @@ export const auth = catchAsyncError(async (req, res, next) => {
     const token = req.headers['authorization']?.split('Bearer ')[1];
     if (!token) {
         return next(new AppLocalizedError({
-            ar: "غير مصرح، لا يوجد رمز.",
-            en: "Not authorized, no token."
+            ar: 'غير مصرح، لا يوجد رمز.',
+            en: 'Not authorized, no token.',
         }, StatusCodes.UNAUTHORIZED));
     }
     try {
         jwt.verify(token, secretKey, (err, decode) => {
             if (err) {
                 return next(new AppLocalizedError({
-                    ar: "رمز التحقق غير صالح.",
-                    en: "Verification token is invalid.",
+                    ar: 'رمز التحقق غير صالح.',
+                    en: 'Verification token is invalid.',
                 }, StatusCodes.UNAUTHORIZED));
             }
             else if (decode) {
@@ -28,8 +28,8 @@ export const auth = catchAsyncError(async (req, res, next) => {
     }
     catch (err) {
         return next(new AppLocalizedError({
-            ar: "رمز التحقق غير صالح.",
-            en: "Verification token is invalid.",
+            ar: 'رمز التحقق غير صالح.',
+            en: 'Verification token is invalid.',
         }, StatusCodes.UNAUTHORIZED));
     }
 });

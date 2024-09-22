@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs';
 const convertArrayToObject = (images) => {
     let imagesObj = {};
-    images.forEach(image => {
+    images.forEach((image) => {
         if (!imagesObj[image]) {
             imagesObj[image] = true;
         }

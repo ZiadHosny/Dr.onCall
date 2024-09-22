@@ -1,5 +1,5 @@
-import { Router } from "express";
-import { APP_NAME } from "../utils/constants.js";
+import { Router } from 'express';
+import { APP_NAME } from '../utils/constants.js';
 const htmlContent = `
 <!DOCTYPE html>
 <html>

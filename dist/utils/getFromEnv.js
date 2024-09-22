@@ -23,6 +23,6 @@ export const getFromEnv = () => {
         secretKey,
         rounds,
         from,
-        mode
+        mode,
     };
 };

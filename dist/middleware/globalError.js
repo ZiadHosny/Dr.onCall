@@ -1,5 +1,5 @@
-import { getFromEnv } from "../utils/getFromEnv.js";
-import { sendLocalizedResponse } from "../utils/response.js";
+import { getFromEnv } from '../utils/getFromEnv.js';
+import { sendLocalizedResponse } from '../utils/response.js';
 export const globalErrorMiddleware = (err, req, res, __) => {
     const { mode } = getFromEnv();
     if (mode == 'dev') {

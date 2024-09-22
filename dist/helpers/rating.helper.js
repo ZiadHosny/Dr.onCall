@@ -3,5 +3,5 @@ export const ratingHelper = (arr) => {
     arr.forEach((ele) => {
         avg += ele;
     });
-    return (avg / arr.length);
+    return avg / arr.length;
 };

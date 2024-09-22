@@ -20,22 +20,22 @@ export class ApiFeature<T extends Document> {
     return this;
   }
 
-  filter() {
-    let filterObj = { ...this.queryString };
-    const excludedQuery = ['page', 'sort', 'fields', 'keyword'];
-    excludedQuery.forEach((q) => {
-      delete filterObj[q];
-    });
+  // filter() {
+  //   let filterObj = { ...this.queryString };
+  //   const excludedQuery = ['page', 'sort', 'fields', 'keyword'];
+  //   excludedQuery.forEach((q) => {
+  //     delete filterObj[q];
+  //   });
 
-    let filterObjJson = JSON.stringify(filterObj);
-    filterObjJson = filterObjJson.replace(
-      /\b(gt|gte|lt|lte)\b/g,
-      (match) => `$${match}`,
-    );
-    filterObj = JSON.parse(filterObjJson);
-    this.mongooseQuery.find(filterObj);
-    return this;
-  }
+  //   let filterObjJson = JSON.stringify(filterObj);
+  //   filterObjJson = filterObjJson.replace(
+  //     /\b(gt|gte|lt|lte)\b/g,
+  //     (match) => `$${match}`,
+  //   );
+  //   filterObj = JSON.parse(filterObjJson);
+  //   this.mongooseQuery.find(filterObj);
+  //   return this;
+  // }
 
   sort() {
     const sort = this.queryString.sort as string | undefined;

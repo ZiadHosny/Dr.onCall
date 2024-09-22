@@ -1,8 +1,8 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
-import { getFromEnv } from "../utils/getFromEnv.js";
-import { logErrMsg, logErrInfoMsg, logSuccessMsg } from "../utils/console/log.js";
-import { userModel } from "../models/user.model.js";
+import { getFromEnv } from '../utils/getFromEnv.js';
+import { logErrMsg, logErrInfoMsg, logSuccessMsg, } from '../utils/console/log.js';
+import { userModel } from '../models/user.model.js';
 import { ROUNDS } from '../utils/constants.js';
 const createAdmin = async () => {
     const users = await userModel.find({});
@@ -14,7 +14,7 @@ const createAdmin = async () => {
             isActive: true,
             phone: '01110146112',
             password: await bcrypt.hash('123', ROUNDS),
-            type: 'doctor'
+            type: 'doctor',
         });
         logSuccessMsg('Admin Created Successfully');
     }

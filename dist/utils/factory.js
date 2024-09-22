@@ -1,7 +1,7 @@
-import { catchAsyncError } from "./catchAsyncError.js";
-import { StatusCodes } from "http-status-codes";
-import { sendLocalizedResponse } from "./response.js";
-import { AppLocalizedError } from "./AppError.js";
+import { catchAsyncError } from './catchAsyncError.js';
+import { StatusCodes } from 'http-status-codes';
+import { sendLocalizedResponse } from './response.js';
+import { AppLocalizedError } from './AppError.js';
 // @desc    Get All Items
 // @route   GET /api/v1/......
 // @access  Public
@@ -64,7 +64,7 @@ import { AppLocalizedError } from "./AppError.js";
 //     );
 // @desc    Create New Item
 // @route   POST /api/v1/......
-// @access  Private 
+// @access  Private
 const createNewItem = (Model) => catchAsyncError(async (req, res, next) => {
     // 1- take data from request body
     const data = req.body;
@@ -75,23 +75,23 @@ const createNewItem = (Model) => catchAsyncError(async (req, res, next) => {
         req,
         res,
         message: {
-            en: "Created Successfully",
-            ar: "تم الانشاء بنجاح",
+            en: 'Created Successfully',
+            ar: 'تم الانشاء بنجاح',
         },
         status: StatusCodes.CREATED,
-        data: document
+        data: document,
     });
 });
 // @desc    Get Specific Item By Id
 // @route   GET /api/v1/......
 // @access  Public
-const getOneItemById = (Model, populate = [""], fields = "-__v") => catchAsyncError(async (req, res, next) => {
+const getOneItemById = (Model, populate = [''], fields = '-__v') => catchAsyncError(async (req, res, next) => {
     // 1- get id of item from params
     const { id } = req.params;
     // 2- find document from mongooseDB
     const query = Model.findById(id).select(fields);
     // 3- get document
-    const document = populate?.length > 0 && populate[0] !== ""
+    const document = populate?.length > 0 && populate[0] !== ''
         ? await query.populate(populate)
         : await query;
     // 4- check if document not found
@@ -107,22 +107,22 @@ const getOneItemById = (Model, populate = [""], fields = "-__v") => catchAsyncEr
         res,
         status: StatusCodes.OK,
         message: {
-            en: "Found Successfully",
-            ar: "تم العثور بنجاح",
+            en: 'Found Successfully',
+            ar: 'تم العثور بنجاح',
         },
-        data: document
+        data: document,
     });
 });
 // @desc    Get Specific Item By Slug
 // @route   GET /api/v1/......
 // @access  Public
-const getOneItemBySlug = (Model, populate = [""], fields = "-__v") => catchAsyncError(async (req, res, next) => {
+const getOneItemBySlug = (Model, populate = [''], fields = '-__v') => catchAsyncError(async (req, res, next) => {
     // 1- get id of item from params
     const { slug } = req.body;
     // 2- find document from mongooseDB
     let query = Model.findOne({ slug }).select(fields);
     // 3- get document
-    const document = populate?.length > 0 && populate[0] !== ""
+    const document = populate?.length > 0 && populate[0] !== ''
         ? await query.populate(populate)
         : await query;
     // 4- check if document not found
@@ -138,16 +138,16 @@ const getOneItemBySlug = (Model, populate = [""], fields = "-__v") => catchAsync
         res,
         status: StatusCodes.OK,
         message: {
-            en: "Found Successfully",
-            ar: "تم العثور بنجاح",
+            en: 'Found Successfully',
+            ar: 'تم العثور بنجاح',
         },
-        data: document
+        data: document,
     });
 });
 // @desc    Update Specific Item
 // @route   PUT    /api/v1/.....
 // @access  Private
-const updateOneItemById = (Model, populate = [""]) => catchAsyncError(async (req, res, next) => {
+const updateOneItemById = (Model, populate = ['']) => catchAsyncError(async (req, res, next) => {
     // 1- get id for item from params
     const { id } = req.params;
     // 2- find item and update in mongooseDB
@@ -155,7 +155,7 @@ const updateOneItemById = (Model, populate = [""]) => catchAsyncError(async (req
         new: true,
     });
     // 3- get document
-    const document = populate?.length > 0 && populate[0] !== ""
+    const document = populate?.length > 0 && populate[0] !== ''
         ? await query.populate(populate)
         : await query;
     // 3- check if document not found
@@ -173,10 +173,10 @@ const updateOneItemById = (Model, populate = [""]) => catchAsyncError(async (req
         res,
         status: StatusCodes.OK,
         message: {
-            en: "Updated Successfully",
-            ar: "تم التعديل بنجاح",
+            en: 'Updated Successfully',
+            ar: 'تم التعديل بنجاح',
         },
-        data: document
+        data: document,
     });
 });
 // @desc    Delete Specific Item
@@ -200,10 +200,10 @@ const deleteOneItemById = (Model) => catchAsyncError(async (req, res, next) => {
         res,
         status: StatusCodes.OK,
         message: {
-            en: "Deleted Successfully",
-            ar: "تم الحذف بنجاح",
+            en: 'Deleted Successfully',
+            ar: 'تم الحذف بنجاح',
         },
-        data: document
+        data: document,
     });
 });
 export const Factory = {
