@@ -24,6 +24,7 @@ export const connectToMongoDb = async () => {
     try {
         await mongoose.connect(mongoDBUrl);
         await createAdmin();
+        console.log(mongoDBUrl, 'zzzzzzzzzzzzzzzz');
         logSuccessMsg(`Connect To Mongo DB Successfully`);
     }
     catch (err) {
