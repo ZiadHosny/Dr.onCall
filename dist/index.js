@@ -4,7 +4,7 @@ import { connectToMongoDb } from './database/connectToMongo.js';
 import { logBlueMsg, logErrMsg } from './utils/console/log.js';
 import router from './router.js';
 import { APP_NAME } from './utils/constants.js';
-import { initSocket } from './database/iOConnection.js';
+// import { initSocket } from './database/iOConnection.js';
 import http from 'http';
 // import { useAutomation } from './automations/corn.js';
 const { port } = getFromEnv();
@@ -13,7 +13,7 @@ const server = http.createServer(app);
 await connectToMongoDb();
 // useAutomation()
 app.use('/', router);
-export const io = initSocket(server);
+// export const io = initSocket(server);
 server.listen(port, () => logBlueMsg(`${APP_NAME} Api listening on port ${port}!`));
 process.on('unhandledRejection', (err) => {
     logErrMsg('unhandledRejection' + err);
