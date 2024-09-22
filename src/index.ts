@@ -15,6 +15,7 @@ const app = express();
 const server = http.createServer(app);
 
 await connectToMongoDb();
+
 // useAutomation()
 
 app.use('/', router);
