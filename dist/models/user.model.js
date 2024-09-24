@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import { Gender, Role } from '../modules/user/user.interface.js';
 const userSchema = new Schema({
     name: {
         type: String,
@@ -32,14 +33,13 @@ const userSchema = new Schema({
     },
     type: {
         type: String,
-        enum: ['doctor', 'user'],
-        default: 'user',
+        enum: Role,
+        default: Role.User,
     },
-    // gender: {
-    //     type: String,
-    //     enum: ['Male', 'Female'],
-    //     required: true,
-    // },
+    gender: {
+        type: String,
+        enum: Gender,
+    },
     // dateOfBirth: {
     //     type: Number,
     //     required: true,

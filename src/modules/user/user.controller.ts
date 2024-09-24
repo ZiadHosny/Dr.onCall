@@ -10,6 +10,7 @@ import { APP_NAME, ROUNDS } from '../../utils/constants.js';
 import { catchAsyncError } from '../../utils/catchAsyncError.js';
 import { StatusCodes } from 'http-status-codes';
 import { AuthRequest } from './user.interface.js';
+import { Messages } from '../../utils/Messages.js';
 
 export const signUp = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -19,10 +20,7 @@ export const signUp = catchAsyncError(
     if (user) {
       next(
         new AppLocalizedError(
-          {
-            ar: 'الحساب موجود بالفعل. يرجى تسجيل الدخول أو إعادة تعيين كلمة المرور.',
-            en: 'Account already exists. Please log in or reset your password.',
-          },
+          Messages.accountAlreadyExists,
           StatusCodes.CONFLICT,
         ),
       );
@@ -30,10 +28,10 @@ export const signUp = catchAsyncError(
       bcrypt.hash(password, rounds, async (err, hash) => {
         if (err) {
           return next(
-            new AppLocalizedError({
-              ar: 'حدث خطأ أثناء تشفير كلمة المرور. يرجى المحاولة لاحقًا.',
-              en: 'An error occurred while hashing the password. Please try again later.',
-            }),
+            new AppLocalizedError(
+              Messages.hashingError,
+              StatusCodes.INTERNAL_SERVER_ERROR,
+            ),
           );
         }
         await userModel.insertMany({
@@ -53,10 +51,7 @@ export const signUp = catchAsyncError(
         sendLocalizedResponse({
           res,
           req,
-          message: {
-            ar: 'تم إنشاء الحساب بنجاح. يمكنك الآن تسجيل الدخول',
-            en: 'Account created successfully. You can now log in.',
-          },
+          message: Messages.accountCreatedSuccessfully,
           data: emailMessage,
           status: StatusCodes.CREATED,
         });
@@ -94,10 +89,7 @@ export const signIn = catchAsyncError(
           sendLocalizedResponse({
             res,
             req,
-            message: {
-              ar: 'تم تسجيل الدخول بنجاح.',
-              en: 'Logged in successfully.',
-            },
+            message: Messages.loginSuccessfully,
             data: {
               token,
               user: {
@@ -110,35 +102,20 @@ export const signIn = catchAsyncError(
           });
         } else {
           next(
-            new AppLocalizedError(
-              {
-                ar: 'يرجى تأكيد بريدك الإلكتروني أولاً.',
-                en: 'Please confirm your email first.',
-              },
-              StatusCodes.FORBIDDEN,
-            ),
+            new AppLocalizedError(Messages.confirmEmail, StatusCodes.FORBIDDEN),
           );
         }
       } else {
         next(
           new AppLocalizedError(
-            {
-              ar: 'كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.',
-              en: 'Incorrect password. Please try again.',
-            },
+            Messages.incorrectPassword,
             StatusCodes.UNAUTHORIZED,
           ),
         );
       }
     } else {
       next(
-        new AppLocalizedError(
-          {
-            ar: 'لم يتم العثور على الحساب. يرجى التحقق من المعلومات المقدمة.',
-            en: 'Account not found. Please check the provided information.',
-          },
-          StatusCodes.NOT_FOUND,
-        ),
+        new AppLocalizedError(Messages.accountNotFound, StatusCodes.NOT_FOUND),
       );
     }
   },
@@ -153,10 +130,7 @@ export const emailVerify = catchAsyncError(
       if (err) {
         next(
           new AppLocalizedError(
-            {
-              ar: 'لم يتم العثور على البريد الإلكتروني. يرجى التحقق من المعلومات المقدمة.',
-              en: 'Email not found. Please check the provided information.',
-            },
+            Messages.accountNotFound,
             StatusCodes.NOT_FOUND,
           ),
         );
@@ -168,19 +142,13 @@ export const emailVerify = catchAsyncError(
           sendLocalizedResponse({
             req,
             res,
-            message: {
-              ar: 'تم تأكيد بريدك الإلكتروني بنجاح.',
-              en: 'Your email has been successfully verified.',
-            },
+            message: Messages.emailVerified,
             status: StatusCodes.OK,
           });
         } else {
           return next(
             new AppLocalizedError(
-              {
-                ar: 'لم يتم العثور على البريد الإلكتروني. يرجى التحقق من المعلومات المقدمة.',
-                en: 'Email not found. Please check the provided information.',
-              },
+              Messages.accountNotFound,
               StatusCodes.NOT_FOUND,
             ),
           );
@@ -200,10 +168,7 @@ export const changePassword = catchAsyncError(
     if (!isPasswordValid) {
       return next(
         new AppLocalizedError(
-          {
-            ar: 'كلمة المرور الحالية غير صحيحة.',
-            en: 'Current password is incorrect.',
-          },
+          Messages.currentPasswordIncorrect,
           StatusCodes.UNAUTHORIZED,
         ),
       );
@@ -217,10 +182,7 @@ export const changePassword = catchAsyncError(
     return sendLocalizedResponse({
       req,
       res,
-      message: {
-        ar: 'تم تغيير كلمة المرور بنجاح.',
-        en: 'Password changed successfully.',
-      },
+      message: Messages.passwordChangedSuccessfully,
       status: StatusCodes.OK,
     });
   },

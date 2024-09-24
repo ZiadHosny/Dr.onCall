@@ -15,6 +15,7 @@ const prodMode = (err, req, res) => {
         res,
         req,
         status: err.statusCode,
+        isError: true,
     });
 };
 const devMode = (err, req, res) => {
@@ -23,5 +24,6 @@ const devMode = (err, req, res) => {
         res,
         req,
         status: err.statusCode,
+        isError: true,
     });
 };

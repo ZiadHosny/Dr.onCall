@@ -24,6 +24,7 @@ const prodMode = (err: AppErrorType, req: Request, res: Response) => {
     res,
     req,
     status: err.statusCode,
+    isError: true,
   });
 };
 
@@ -33,5 +34,6 @@ const devMode = (err: AppErrorType, req: Request, res: Response) => {
     res,
     req,
     status: err.statusCode,
+    isError: true,
   });
 };

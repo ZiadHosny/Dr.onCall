@@ -8,6 +8,7 @@ import { sendLocalizedResponse } from '../../utils/response.js';
 import { StatusCodes } from 'http-status-codes';
 import { Factory } from '../../utils/factory.js';
 import { catchAsyncError } from '../../utils/catchAsyncError.js';
+import { Messages } from '../../utils/Messages.js';
 
 export const addDoctor = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -19,10 +20,7 @@ export const addDoctor = catchAsyncError(
     if (user) {
       next(
         new AppLocalizedError(
-          {
-            ar: 'الحساب موجود بالفعل. يرجى تسجيل الدخول أو إعادة تعيين كلمة المرور.',
-            en: 'Account already exists. Please log in or reset your password.',
-          },
+          Messages.accountAlreadyExists,
           StatusCodes.CONFLICT,
         ),
       );
@@ -30,10 +28,10 @@ export const addDoctor = catchAsyncError(
       bcrypt.hash(password, rounds, async (err, hash) => {
         if (err) {
           return next(
-            new AppLocalizedError({
-              ar: 'حدث خطأ أثناء تشفير كلمة المرور. يرجى المحاولة لاحقًا.',
-              en: 'An error occurred while hashing the password. Please try again later.',
-            }),
+            new AppLocalizedError(
+              Messages.hashingError,
+              StatusCodes.INTERNAL_SERVER_ERROR,
+            ),
           );
         }
         const user = await userModel.create({

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Request } from 'express';
 
 export interface AuthRequest extends Request {
@@ -8,22 +9,9 @@ export interface AuthRequest extends Request {
     password: string;
     iat: number;
     email: string;
-    type: 'doctor' | 'user';
+    type: Role;
   };
 }
-export type User = {
-  name: string;
-  email: string;
-  password: string;
-  phone: string;
-  type: 'doctor' | 'user';
-  isActive: boolean;
-  isVerified: boolean;
-
-  // gender: "Male" | "Female",
-  // bloodType: String,
-  // dateOfBirth: number,
-};
 
 export enum Gender {
   Male = 'male',
@@ -31,23 +19,30 @@ export enum Gender {
 }
 
 export enum Role {
-  RootAdmin = 'rootAdmin',
-  AdminA = 'adminA',
-  AdminB = 'adminB',
-  AdminC = 'adminC',
-  SubAdmin = 'subAdmin',
-  USER = 'user',
-  Guest = 'guest',
-  Marketer = 'marketer',
+  SuperAdmin = 'superAdmin',
+  Admin = 'admin',
+  User = 'user',
+  Doctor = 'doctor',
 }
 
-export interface IRole {
-  rootAdmin: string;
-  adminA: string;
-  adminB: string;
-  adminC: string;
-  subAdmin: string;
-  user: string;
-  guest: string;
-  marketer: string;
-}
+export const AllRoles = [Role.SuperAdmin, Role.Admin, Role.User, Role.Doctor];
+
+export type User = {
+  name: string;
+  email: string;
+  password: string;
+  phone: string;
+  type: Role;
+  isActive: boolean;
+  isVerified: boolean;
+  gender: Gender;
+  // bloodType: String,
+  // dateOfBirth: number,
+};
+
+// export interface IRole {
+//   superAdmin: string;
+//   admin: string;
+//   user: string;
+//   doctor: string;
+// }

@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { User } from '../modules/user/user.interface.js';
+import { Gender, Role, User } from '../modules/user/user.interface.js';
 
 const userSchema = new Schema<User>(
   {
@@ -35,15 +35,13 @@ const userSchema = new Schema<User>(
     },
     type: {
       type: String,
-      enum: ['doctor', 'user'],
-      default: 'user',
+      enum: Role,
+      default: Role.User,
     },
-
-    // gender: {
-    //     type: String,
-    //     enum: ['Male', 'Female'],
-    //     required: true,
-    // },
+    gender: {
+      type: String,
+      enum: Gender,
+    },
 
     // dateOfBirth: {
     //     type: Number,

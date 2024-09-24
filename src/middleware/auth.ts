@@ -5,6 +5,7 @@ import { AppLocalizedError } from '../utils/AppError.js';
 import { catchAsyncError } from '../utils/catchAsyncError.js';
 import { StatusCodes } from 'http-status-codes';
 import { AuthRequest } from '../modules/user/user.interface.js';
+import { Messages } from '../utils/Messages.js';
 
 export const auth = catchAsyncError(
   async (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -13,13 +14,7 @@ export const auth = catchAsyncError(
 
     if (!token) {
       return next(
-        new AppLocalizedError(
-          {
-            ar: 'غير مصرح، لا يوجد رمز.',
-            en: 'Not authorized, no token.',
-          },
-          StatusCodes.UNAUTHORIZED,
-        ),
+        new AppLocalizedError(Messages.noToken, StatusCodes.UNAUTHORIZED),
       );
     }
 
@@ -28,10 +23,7 @@ export const auth = catchAsyncError(
         if (err) {
           return next(
             new AppLocalizedError(
-              {
-                ar: 'رمز التحقق غير صالح.',
-                en: 'Verification token is invalid.',
-              },
+              Messages.invalidToken,
               StatusCodes.UNAUTHORIZED,
             ),
           );
@@ -42,13 +34,7 @@ export const auth = catchAsyncError(
       });
     } catch (err) {
       return next(
-        new AppLocalizedError(
-          {
-            ar: 'رمز التحقق غير صالح.',
-            en: 'Verification token is invalid.',
-          },
-          StatusCodes.UNAUTHORIZED,
-        ),
+        new AppLocalizedError(Messages.invalidToken, StatusCodes.UNAUTHORIZED),
       );
     }
   },

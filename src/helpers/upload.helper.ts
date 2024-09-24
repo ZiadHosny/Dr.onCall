@@ -2,6 +2,7 @@ import multer from 'multer';
 import { AppLocalizedError } from '../utils/AppError.js';
 import { StatusCodes } from 'http-status-codes';
 import { Request } from 'express';
+import { Messages } from '../utils/Messages.js';
 
 const memoryStorage = multer.memoryStorage();
 
@@ -30,10 +31,7 @@ const fileFilter = (req: Request, file: Express.Multer.File, cb: Function) => {
   else
     cb(
       new AppLocalizedError(
-        {
-          ar: 'يجب أن يكون الملف من نوع صورة.',
-          en: 'The file should be an image type.',
-        },
+        Messages.imageFile,
         StatusCodes.UNSUPPORTED_MEDIA_TYPE,
       ),
       false,

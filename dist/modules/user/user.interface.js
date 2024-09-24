@@ -5,12 +5,15 @@ export var Gender;
 })(Gender || (Gender = {}));
 export var Role;
 (function (Role) {
-    Role["RootAdmin"] = "rootAdmin";
-    Role["AdminA"] = "adminA";
-    Role["AdminB"] = "adminB";
-    Role["AdminC"] = "adminC";
-    Role["SubAdmin"] = "subAdmin";
-    Role["USER"] = "user";
-    Role["Guest"] = "guest";
-    Role["Marketer"] = "marketer";
+    Role["SuperAdmin"] = "superAdmin";
+    Role["Admin"] = "admin";
+    Role["User"] = "user";
+    Role["Doctor"] = "doctor";
 })(Role || (Role = {}));
+export const AllRoles = [Role.SuperAdmin, Role.Admin, Role.User, Role.Doctor];
+// export interface IRole {
+//   superAdmin: string;
+//   admin: string;
+//   user: string;
+//   doctor: string;
+// }

@@ -2,6 +2,7 @@ import { catchAsyncError } from './catchAsyncError.js';
 import { StatusCodes } from 'http-status-codes';
 import { sendLocalizedResponse } from './response.js';
 import { AppLocalizedError } from './AppError.js';
+import { Messages } from './Messages.js';
 // @desc    Get All Items
 // @route   GET /api/v1/......
 // @access  Public
@@ -74,10 +75,7 @@ const createNewItem = (Model) => catchAsyncError(async (req, res, next) => {
     return sendLocalizedResponse({
         req,
         res,
-        message: {
-            en: 'Created Successfully',
-            ar: 'تم الانشاء بنجاح',
-        },
+        message: Messages.createdSuccessfully,
         status: StatusCodes.CREATED,
         data: document,
     });
@@ -106,10 +104,7 @@ const getOneItemById = (Model, populate = [''], fields = '-__v') => catchAsyncEr
         req,
         res,
         status: StatusCodes.OK,
-        message: {
-            en: 'Found Successfully',
-            ar: 'تم العثور بنجاح',
-        },
+        message: Messages.foundSuccessfully,
         data: document,
     });
 });
@@ -137,10 +132,7 @@ const getOneItemBySlug = (Model, populate = [''], fields = '-__v') => catchAsync
         req,
         res,
         status: StatusCodes.OK,
-        message: {
-            en: 'Found Successfully',
-            ar: 'تم العثور بنجاح',
-        },
+        message: Messages.foundSuccessfully,
         data: document,
     });
 });
@@ -172,10 +164,7 @@ const updateOneItemById = (Model, populate = ['']) => catchAsyncError(async (req
         req,
         res,
         status: StatusCodes.OK,
-        message: {
-            en: 'Updated Successfully',
-            ar: 'تم التعديل بنجاح',
-        },
+        message: Messages.updatedSuccessfully,
         data: document,
     });
 });
@@ -199,10 +188,7 @@ const deleteOneItemById = (Model) => catchAsyncError(async (req, res, next) => {
         req,
         res,
         status: StatusCodes.OK,
-        message: {
-            en: 'Deleted Successfully',
-            ar: 'تم الحذف بنجاح',
-        },
+        message: Messages.deleteSuccessfully,
         data: document,
     });
 });

@@ -1,6 +1,7 @@
 import multer from 'multer';
 import { AppLocalizedError } from '../utils/AppError.js';
 import { StatusCodes } from 'http-status-codes';
+import { Messages } from '../utils/Messages.js';
 const memoryStorage = multer.memoryStorage();
 export const uploadMemory = multer({
     storage: memoryStorage,
@@ -22,10 +23,7 @@ const fileFilter = (req, file, cb) => {
     if (file.mimetype.startsWith('image'))
         cb(null, true);
     else
-        cb(new AppLocalizedError({
-            ar: 'يجب أن يكون الملف من نوع صورة.',
-            en: 'The file should be an image type.',
-        }, StatusCodes.UNSUPPORTED_MEDIA_TYPE), false);
+        cb(new AppLocalizedError(Messages.imageFile, StatusCodes.UNSUPPORTED_MEDIA_TYPE), false);
 };
 const uploadImage = (path) => multer({ storage: diskStorage(path), fileFilter });
 export const uploadSingleImage = (field, path) => {

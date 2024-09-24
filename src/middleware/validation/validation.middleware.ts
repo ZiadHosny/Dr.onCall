@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import Joi from 'joi';
 import { logBlueMsg } from '../../utils/console/log.js';
-import { AppError } from '../../utils/AppError.js';
+import { AppLocalizedError } from '../../utils/AppError.js';
+import { StatusCodes } from 'http-status-codes';
 
 export const validation = (
   schema: Joi.ObjectSchema,
@@ -13,8 +14,19 @@ export const validation = (
 
     logBlueMsg(`Validation for request part:  ${reqPart}`);
 
+    const message =
+      error?.details.map((i: any) => i.message).join(',') ?? 'Validation Error';
+
     return error
-      ? next(new AppError(error.message, 400, error.details))
+      ? next(
+          new AppLocalizedError(
+            {
+              ar: message,
+              en: message,
+            },
+            StatusCodes.BAD_REQUEST,
+          ),
+        )
       : next();
   };
 };
