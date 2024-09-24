@@ -49,34 +49,35 @@ export const signIn = catchAsyncError(async (req, res, next) => {
     if (user) {
         const match = await bcrypt.compare(password, user.password);
         const { _id: userId, name, isVerified, isActive, type } = user;
+        const token = jwt.sign({
+            userId,
+            name,
+            isVerified,
+            password: user.password,
+            email,
+            type,
+        }, secretKey);
+        if (!isVerified) {
+            next(new AppLocalizedError(Messages.confirmEmail, StatusCodes.FORBIDDEN));
+        }
+        if (!isActive) {
+            next(new AppLocalizedError(Messages.inActiveUser, StatusCodes.FORBIDDEN));
+        }
         if (match) {
-            const token = jwt.sign({
-                userId,
-                name,
-                isVerified,
-                password: user.password,
-                email,
-                type,
-            }, secretKey);
-            if (isVerified && isActive) {
-                sendLocalizedResponse({
-                    res,
-                    req,
-                    message: Messages.loginSuccessfully,
-                    data: {
-                        token,
-                        user: {
-                            name,
-                            email,
-                            type,
-                        },
+            sendLocalizedResponse({
+                res,
+                req,
+                message: Messages.loginSuccessfully,
+                data: {
+                    token,
+                    user: {
+                        name,
+                        email,
+                        type,
                     },
-                    status: StatusCodes.OK,
-                });
-            }
-            else {
-                next(new AppLocalizedError(Messages.confirmEmail, StatusCodes.FORBIDDEN));
-            }
+                },
+                status: StatusCodes.OK,
+            });
         }
         else {
             next(new AppLocalizedError(Messages.incorrectPassword, StatusCodes.UNAUTHORIZED));

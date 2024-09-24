@@ -51,6 +51,10 @@ export const Messages = {
         ar: 'تم انشاء الحساب يرجى تأكيد بريدك الإلكتروني أولاً.',
         en: 'Account created. Please verify your email first.',
     },
+    inActiveUser: {
+        en: 'Your account is currently inactive. Please contact support to reactivate.',
+        ar: 'حسابك غير نشط حاليًا. يرجى الاتصال بالدعم لإعادة تفعيله.',
+    },
     confirmEmail: {
         ar: 'يرجى تأكيد بريدك الإلكتروني أولاً.',
         en: 'Please confirm your email first.',
