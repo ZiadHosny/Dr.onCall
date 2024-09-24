@@ -42,7 +42,7 @@ export const signUp = catchAsyncError(
         });
 
         const token = jwt.sign({ email }, secretKey);
-        const emailMessage = await sendEmail({
+        await sendEmail({
           userEmail: email,
           token,
           subject: `Verification From ${APP_NAME} App`,
@@ -51,8 +51,7 @@ export const signUp = catchAsyncError(
         sendLocalizedResponse({
           res,
           req,
-          message: Messages.accountCreatedSuccessfully,
-          data: emailMessage,
+          message: Messages.registerSuccessfullyConfirmEmail,
           status: StatusCodes.CREATED,
         });
       });

@@ -49,6 +49,10 @@ export const Messages = {
     ar: 'لم يتم العثور على الحساب. يرجى التحقق من المعلومات المقدمة.',
     en: 'Account not found. Please check the provided information.',
   },
+  registerSuccessfullyConfirmEmail: {
+    ar: 'تم انشاء الحساب يرجى تأكيد بريدك الإلكتروني أولاً.',
+    en: 'Account created. Please verify your email first.',
+  },
   confirmEmail: {
     ar: 'يرجى تأكيد بريدك الإلكتروني أولاً.',
     en: 'Please confirm your email first.',
