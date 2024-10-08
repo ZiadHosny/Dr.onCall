@@ -17,7 +17,20 @@ const htmlContent = `
       align-items: center;
       justify-content: center;
       text-align: center;
-        font-family: sans-serif;
+      font-family: sans-serif;
+      animation: backgroundAnimation 10s infinite alternate;
+    }
+
+      @keyframes backgroundAnimation {
+      0% {
+        background-color: #3498db; /* Blue */
+      }
+      50% {
+        background-color: #000; /* Red */
+      }
+      100% {
+        background-color: #2ecc71; /* Green */
+      }
     }
 
     /* Style the h1 element */
