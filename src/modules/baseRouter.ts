@@ -18,18 +18,42 @@ const htmlContent = `
       justify-content: center;
       text-align: center;
       font-family: sans-serif;
-      animation: backgroundAnimation 10s infinite alternate;
+      animation: backgroundAnimation 15s infinite alternate;
     }
 
       @keyframes backgroundAnimation {
       0% {
-        background-color: #3498db; /* Blue */
+        background-color: #000000; /* Black */
+      }
+      10% {
+        background-color: #0d0d0d; /* Very Dark Gray */
+      }
+      20% {
+        background-color: #1a1a1a; /* Dark Gray */
+      }
+      30% {
+        background-color: #262626; /* Darker Gray */
+      }
+      40% {
+        background-color: #404040; /* Medium Gray */
       }
       50% {
-        background-color: #000; /* Red */
+        background-color: #666666; /* Light Gray */
+      }
+      60% {
+        background-color: #808080; /* Lighter Gray */
+      }
+      70% {
+        background-color: #999999; /* Medium Light Gray */
+      }
+      80% {
+        background-color: #b3b3b3; /* Light Gray */
+      }
+      90% {
+        background-color: #cccccc; /* Very Light Gray */
       }
       100% {
-        background-color: #2ecc71; /* Green */
+        background-color: #e6e6e6; /* Almost White */
       }
     }
 
