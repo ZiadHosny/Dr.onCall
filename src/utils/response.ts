@@ -1,5 +1,6 @@
 import { Response, Request } from 'express';
 import { LangType } from './types.js';
+import { PaginationInfo } from './ApiFeature.js';
 
 type SendResponseType<T> = {
   res: Response;
@@ -8,6 +9,9 @@ type SendResponseType<T> = {
   page?: number;
   data?: any;
   isError?: boolean;
+  details?: string;
+  paginationInfo?: PaginationInfo;
+  length?: number;
 };
 
 export const sendResponse = ({
@@ -33,21 +37,27 @@ interface SendLocalizedType extends SendResponseType<LangType> {
 export const sendLocalizedResponse = ({
   req,
   res,
-  status,
+  status = 500,
   message,
   isError = false,
   page,
   data,
+  details,
+  paginationInfo,
+  length,
 }: SendLocalizedType) => {
   // // Get the preferred language from the Accept-Language header or default to English
   const lang = req.headers['accept-language']?.includes('ar') ? 'ar' : 'en';
 
   const messageOrError = isError
-    ? { error: lang === 'ar' ? message.ar : message.en }
-    : { message: lang === 'ar' ? message.ar : message.en };
+    ? { error: lang === 'ar' && message.ar ? message.ar : message.en }
+    : { message: lang === 'ar' && message.ar ? message.ar : message.en };
 
   const response = {
     ...messageOrError,
+    details,
+    paginationInfo,
+    length,
     data,
   };
 

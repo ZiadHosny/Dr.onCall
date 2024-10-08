@@ -1,13 +1,13 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { getFromEnv } from '../utils/getFromEnv.js';
 import { AppErrorType } from '../utils/AppError.js';
 import { sendLocalizedResponse } from '../utils/response.js';
+import { Messages } from '../utils/Messages.js';
 
 export const globalErrorMiddleware = (
   err: AppErrorType,
   req: Request,
   res: Response,
-  __: NextFunction,
 ) => {
   const { mode } = getFromEnv();
 
@@ -19,21 +19,27 @@ export const globalErrorMiddleware = (
 };
 
 const prodMode = (err: AppErrorType, req: Request, res: Response) => {
+  const details = !err.localizedMessage ? { details: err.toString() } : {};
+
   sendLocalizedResponse({
-    message: err.localizedMessage,
+    message: err.localizedMessage ?? Messages.serverError,
     res,
     req,
     status: err.statusCode,
     isError: true,
+    ...details,
   });
 };
 
 const devMode = (err: AppErrorType, req: Request, res: Response) => {
+  const details = !err.localizedMessage ? { details: err.toString() } : {};
+
   sendLocalizedResponse({
-    message: err.localizedMessage,
+    message: err.localizedMessage ?? Messages.serverError,
     res,
     req,
     status: err.statusCode,
     isError: true,
+    ...details,
   });
 };

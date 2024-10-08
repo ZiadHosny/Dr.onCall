@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt';
-import { userModel } from '../../models/user.model.js';
+import { UserModel } from '../../models/user.model.js';
 import jwt from 'jsonwebtoken';
 import { getFromEnv } from '../../utils/getFromEnv.js';
 import { sendEmail } from '../../utils/email/sendEmail.js';
@@ -9,10 +9,11 @@ import { APP_NAME, ROUNDS } from '../../utils/constants.js';
 import { catchAsyncError } from '../../utils/catchAsyncError.js';
 import { StatusCodes } from 'http-status-codes';
 import { Messages } from '../../utils/Messages.js';
+import { Factory } from '../../utils/factory.js';
 export const signUp = catchAsyncError(async (req, res, next) => {
     const { name, email, password, phone } = req.body;
     const { secretKey, rounds } = getFromEnv();
-    const user = await userModel.findOne({ email });
+    const user = await UserModel.findOne({ email });
     if (user) {
         next(new AppLocalizedError(Messages.accountAlreadyExists, StatusCodes.CONFLICT));
     }
@@ -21,7 +22,7 @@ export const signUp = catchAsyncError(async (req, res, next) => {
             if (err) {
                 return next(new AppLocalizedError(Messages.hashingError, StatusCodes.INTERNAL_SERVER_ERROR));
             }
-            await userModel.insertMany({
+            await UserModel.insertMany({
                 name,
                 email,
                 password: hash,
@@ -45,7 +46,7 @@ export const signUp = catchAsyncError(async (req, res, next) => {
 export const signIn = catchAsyncError(async (req, res, next) => {
     const { email, password } = req.body;
     const { secretKey } = getFromEnv();
-    const user = await userModel.findOne({ email });
+    const user = await UserModel.findOne({ email });
     if (user) {
         const match = await bcrypt.compare(password, user.password);
         const { _id: userId, name, isVerified, isActive, type } = user;
@@ -96,9 +97,9 @@ export const emailVerify = catchAsyncError(async (req, res, next) => {
         }
         else {
             const { email } = decoded;
-            const user = await userModel.findOne({ email });
+            const user = await UserModel.findOne({ email });
             if (user) {
-                await userModel.findOneAndUpdate({ email }, { isVerified: true });
+                await UserModel.findOneAndUpdate({ email }, { isVerified: true });
                 sendLocalizedResponse({
                     req,
                     res,
@@ -122,7 +123,7 @@ export const changePassword = catchAsyncError(async (req, res, next) => {
     }
     // Hash the new password
     const hashedPassword = await bcrypt.hash(newPassword, ROUNDS);
-    await userModel.findByIdAndUpdate(userId, { password: hashedPassword });
+    await UserModel.findByIdAndUpdate(userId, { password: hashedPassword });
     return sendLocalizedResponse({
         req,
         res,
@@ -130,3 +131,4 @@ export const changePassword = catchAsyncError(async (req, res, next) => {
         status: StatusCodes.OK,
     });
 });
+export const allUsers = Factory.getAllItems(UserModel, {});

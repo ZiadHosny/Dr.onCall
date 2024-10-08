@@ -50,4 +50,4 @@ const userSchema = new Schema({
     //     required: true,
     // }
 }, { timestamps: true });
-export const userModel = model('User', userSchema);
+export const UserModel = model('User', userSchema);

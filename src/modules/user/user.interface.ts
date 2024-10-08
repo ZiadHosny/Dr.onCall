@@ -25,8 +25,6 @@ export enum Role {
   Doctor = 'doctor',
 }
 
-export const AllRoles = [Role.SuperAdmin, Role.Admin, Role.User, Role.Doctor];
-
 export type User = {
   name: string;
   email: string;

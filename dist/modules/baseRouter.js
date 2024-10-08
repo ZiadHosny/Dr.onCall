@@ -26,7 +26,7 @@ const htmlContent = `
   </style>
   </head>
   <body>
-    <h1>Hello From ${APP_NAME} Api!</h1>
+    <h1>${APP_NAME} Api!</h1>
   </body>
 </html>
 `;

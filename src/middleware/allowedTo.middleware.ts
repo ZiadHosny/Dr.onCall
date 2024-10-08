@@ -52,8 +52,8 @@ export const allowedTo = (...roles: Roles) =>
         return next(
           new AppLocalizedError(
             {
-              en: 'Access denied for Doctor.',
-              ar: 'تم رفض الوصول للطبيب.',
+              en: 'Access denied for User.',
+              ar: 'تم رفض الوصول للمستخدم.',
             },
             StatusCodes.FORBIDDEN,
           ),

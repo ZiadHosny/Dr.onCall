@@ -6,6 +6,7 @@ import router from './router.js';
 import { APP_NAME } from './utils/constants.js';
 // import { initSocket } from './database/iOConnection.js';
 import http from 'http';
+// import { setDummyData } from './helpers/dummyData.helper.js';
 // import { useAutomation } from './automations/corn.js';
 
 const { port } = getFromEnv();
@@ -16,6 +17,7 @@ const server = http.createServer(app);
 await connectToMongoDb();
 
 // useAutomation()
+// await setDummyData();
 
 app.use('/', router);
 

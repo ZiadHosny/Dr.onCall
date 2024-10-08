@@ -1,63 +1,99 @@
 export class ApiFeature {
     mongooseQuery;
     queryString;
-    page = 1;
-    constructor(mongooseQuery, req) {
+    paginationInfo = {
+        totalPages: 0,
+        page: 0,
+        limit: 0,
+        totalLength: 0,
+    };
+    data = [];
+    constructor(mongooseQuery, queryString) {
         this.mongooseQuery = mongooseQuery;
-        this.queryString = req.query;
+        this.queryString = queryString;
     }
-    paginate() {
-        const { page } = this.queryString;
-        let pageNumber = Number(page) * 1 || 1;
-        if (pageNumber <= 0)
-            pageNumber = 1;
-        let skip = (pageNumber - 1) * 5;
-        this.page = pageNumber;
-        this.mongooseQuery.skip(skip).limit(5);
+    sort() {
+        const sort = this.queryString.sort?.split(',').join(' ');
+        this.mongooseQuery.sort(sort);
         return this;
     }
-    // filter() {
-    //   let filterObj = { ...this.queryString };
-    //   const excludedQuery = ['page', 'sort', 'fields', 'keyword'];
-    //   excludedQuery.forEach((q) => {
-    //     delete filterObj[q];
-    //   });
-    //   let filterObjJson = JSON.stringify(filterObj);
-    //   filterObjJson = filterObjJson.replace(
-    //     /\b(gt|gte|lt|lte)\b/g,
-    //     (match) => `$${match}`,
-    //   );
-    //   filterObj = JSON.parse(filterObjJson);
-    //   this.mongooseQuery.find(filterObj);
-    //   return this;
-    // }
-    sort() {
-        const sort = this.queryString.sort;
-        if (sort) {
-            const sortedBy = sort.split(',').join('.');
-            this.mongooseQuery.sort(sortedBy);
+    async paginate() {
+        const { limit, page } = this.queryString;
+        const pageNumber = page ? +page : 1;
+        const limitNumber = limit ? +limit : 10;
+        const countQuery = this.mongooseQuery.model.find({
+            ...this.mongooseQuery.getQuery(),
+        });
+        const total = await countQuery.countDocuments();
+        const totalPages = Math.ceil(total / limitNumber);
+        const skip = ((pageNumber > totalPages ? totalPages : pageNumber) - 1) * limitNumber;
+        this.mongooseQuery = this.mongooseQuery.skip(skip).limit(limitNumber);
+        this.paginationInfo = {
+            totalPages,
+            page: pageNumber > totalPages ? totalPages : pageNumber,
+            limit: limitNumber,
+            totalLength: total,
+        };
+        this.data = await this.mongooseQuery;
+        return this;
+    }
+    filter() {
+        let queryObj = { ...this.queryString };
+        const excludedFields = [
+            'sort',
+            'limit',
+            'page',
+            'fields',
+            'keyword',
+            'populate',
+        ];
+        excludedFields.forEach((el) => delete queryObj[el]);
+        let queryStr = JSON.stringify(excludedFields);
+        queryStr = queryStr.replace(/\b(gte|gt|lte|lt|eq|ne|in|nin)\b/g, (match) => `$${match}`);
+        let parsedQueryString;
+        if (queryStr.includes('$in')) {
+            parsedQueryString = JSON.parse(queryStr);
+            let splittedTypes = Array.from(parsedQueryString['type']['$in'].split(','));
+            parsedQueryString['type']['$in'] = splittedTypes;
+            queryStr = JSON.stringify(parsedQueryString);
         }
+        this.mongooseQuery = this.mongooseQuery.find(JSON.parse(queryStr));
         return this;
     }
     search() {
         const { keyword } = this.queryString;
         if (keyword) {
-            this.mongooseQuery.find({
-                $or: [
-                    {
-                        name: { $regex: keyword, $options: 'i' },
-                        // description: { $regex: keyword, $options: 'i' }
-                    },
-                ],
-            });
+            const keywordObj = {
+                $or: Object.keys(keyword).map((key) => {
+                    if (typeof keyword[key] === 'string') {
+                        return {
+                            [key]: { $regex: keyword[key], $options: 'i' },
+                        };
+                    }
+                    const keys = keyword[key].map((value) => ({
+                        [key]: { $regex: value, $options: 'i' },
+                    }));
+                    return { $or: keys };
+                }),
+            };
+            this.mongooseQuery = this.mongooseQuery.find(keywordObj);
         }
         return this;
     }
     fields() {
-        const fields = this.queryString.fields;
-        if (fields) {
-            const select = fields.split(',').join(' ');
-            this.mongooseQuery.select(select);
+        console.log(this.queryString);
+        const select = this.queryString.fields?.split(',').join(' ') ?? '';
+        this.mongooseQuery.select(select);
+        return this;
+    }
+    populate() {
+        const populate = this.queryString?.populate
+            ?.split(',')
+            .map((field) => field.trim());
+        if (populate) {
+            populate.forEach((field) => {
+                this.mongooseQuery = this.mongooseQuery.populate(field);
+            });
         }
         return this;
     }

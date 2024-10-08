@@ -5,6 +5,14 @@
 // }
 
 export const Messages = {
+  serverError: {
+    en: 'An error occurred on the server. Please try again later.',
+    ar: 'حدث خطأ في الخادم. الرجاء المحاولة مرة أخرى لاحقًا.',
+  },
+  isExistBefore: {
+    en: 'Duplicate key error: A record with this key already exists.',
+    ar: 'خطأ مفتاح مكرر: يوجد بالفعل سجل بهذا المفتاح.',
+  },
   imageFile: {
     ar: 'يجب أن يكون الملف من نوع صورة.',
     en: 'The file should be an image type.',
@@ -14,8 +22,8 @@ export const Messages = {
     ar: 'تم الانشاء بنجاح',
   },
   updatedSuccessfully: {
-    en: 'Deleted Successfully',
-    ar: 'تم الحذف بنجاح',
+    en: 'updated Successfully',
+    ar: 'تم التعديل بنجاح',
   },
   foundSuccessfully: {
     en: 'Found Successfully',

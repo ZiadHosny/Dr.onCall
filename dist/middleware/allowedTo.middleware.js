@@ -28,8 +28,8 @@ export const allowedTo = (...roles) => catchAsyncError(async (req, res, next) =>
     // if rule is user ant it's not in roles array
     if (!roles.includes(Role.User) && type === Role.User) {
         return next(new AppLocalizedError({
-            en: 'Access denied for Doctor.',
-            ar: 'تم رفض الوصول للطبيب.',
+            en: 'Access denied for User.',
+            ar: 'تم رفض الوصول للمستخدم.',
         }, StatusCodes.FORBIDDEN));
     }
     next();

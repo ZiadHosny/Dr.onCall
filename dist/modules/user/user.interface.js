@@ -10,7 +10,6 @@ export var Role;
     Role["User"] = "user";
     Role["Doctor"] = "doctor";
 })(Role || (Role = {}));
-export const AllRoles = [Role.SuperAdmin, Role.Admin, Role.User, Role.Doctor];
 // export interface IRole {
 //   superAdmin: string;
 //   admin: string;

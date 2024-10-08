@@ -3,6 +3,7 @@ import path from 'path';
 // import { Product } from "../models/product.model";
 // import { Section } from "../models/section.model";
 import { catchAsyncError } from '../utils/catchAsyncError.js';
+import { StatusCodes } from 'http-status-codes';
 export const deleteImage = catchAsyncError(async (req, res) => {
     let { image } = req.body;
     let photoPath = path.join(__dirname, '..', '..', 'uploads', image);
@@ -14,7 +15,7 @@ export const deleteImage = catchAsyncError(async (req, res) => {
             }
             else {
                 return res
-                    .status(200)
+                    .status(StatusCodes.OK)
                     .send({ success_en: 'Image deleted Successfully', image });
             }
         });
@@ -22,14 +23,16 @@ export const deleteImage = catchAsyncError(async (req, res) => {
 });
 // ALL I NEED TO DO IS TO CHECK WITHER THE IMAGES IN THE UPLOADS FILE IS USED IN THE PRODUCT OR NOT
 // IF IT IS NOT DELETE IT OTHERWISE DO NOTHING
-export const autoDeleteImages = catchAsyncError(async (req, res) => {
-    // first gets array of all the images
-    // let products = (await Product.find({})).map(product => product.images)
-    // let sections = (await Section.find({})).map(section => {
-    //     if (section.image)
-    //         return section.image
-    // })
-});
+// export const autoDeleteImages = catchAsyncError(
+//   async (req: Request, res: Response) => {
+//     // first gets array of all the images
+//     // let products = (await Product.find({})).map(product => product.images)
+//     // let sections = (await Section.find({})).map(section => {
+//     //     if (section.image)
+//     //         return section.image
+//     // })
+//   },
+// );
 export const deletingImages = (req, res) => {
     const { images } = req.body;
     const basePath = path.join(__dirname, '..', '..', 'uploads');
@@ -43,7 +46,7 @@ export const deletingImages = (req, res) => {
                 }
                 else {
                     return res
-                        .status(200)
+                        .status(StatusCodes.OK)
                         .send({ success_en: 'Image deleted Successfully' });
                 }
             });

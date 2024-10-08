@@ -7,6 +7,7 @@ import { baseRouter } from './modules/baseRouter.js';
 import { invalidRouter } from './modules/invalidRouter.js';
 import { globalErrorMiddleware } from './middleware/globalError.js';
 import { getFromEnv } from './utils/getFromEnv.js';
+import { symptomRouter } from './modules/symptom/symptom.router.js';
 const { mode } = getFromEnv();
 const router = Router();
 //Middleware
@@ -23,6 +24,7 @@ router.use('/', baseRouter);
 router.use('/api', baseRouter);
 router.use('/api/users', userRouter);
 router.use('/api/doctors', doctorRouter);
+router.use('/api/symptoms', symptomRouter);
 // default Routes
 router.use('*', invalidRouter);
 router.use(globalErrorMiddleware);

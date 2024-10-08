@@ -5,5 +5,6 @@ export type Doctor = {
   imageUrl: string;
   specialty: string;
   rating: number;
+  symptoms: string[];
   userRating: number | null;
 };

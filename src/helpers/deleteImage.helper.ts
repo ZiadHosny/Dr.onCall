@@ -4,6 +4,7 @@ import path from 'path';
 // import { Product } from "../models/product.model";
 // import { Section } from "../models/section.model";
 import { catchAsyncError } from '../utils/catchAsyncError.js';
+import { StatusCodes } from 'http-status-codes';
 
 export const deleteImage = catchAsyncError(
   async (req: Request, res: Response) => {
@@ -17,7 +18,7 @@ export const deleteImage = catchAsyncError(
           return res.status(400).send({ error_en: err.message });
         } else {
           return res
-            .status(200)
+            .status(StatusCodes.OK)
             .send({ success_en: 'Image deleted Successfully', image });
         }
       });
@@ -27,16 +28,16 @@ export const deleteImage = catchAsyncError(
 
 // ALL I NEED TO DO IS TO CHECK WITHER THE IMAGES IN THE UPLOADS FILE IS USED IN THE PRODUCT OR NOT
 // IF IT IS NOT DELETE IT OTHERWISE DO NOTHING
-export const autoDeleteImages = catchAsyncError(
-  async (req: Request, res: Response) => {
-    // first gets array of all the images
-    // let products = (await Product.find({})).map(product => product.images)
-    // let sections = (await Section.find({})).map(section => {
-    //     if (section.image)
-    //         return section.image
-    // })
-  },
-);
+// export const autoDeleteImages = catchAsyncError(
+//   async (req: Request, res: Response) => {
+//     // first gets array of all the images
+//     // let products = (await Product.find({})).map(product => product.images)
+//     // let sections = (await Section.find({})).map(section => {
+//     //     if (section.image)
+//     //         return section.image
+//     // })
+//   },
+// );
 
 export const deletingImages = (req: Request, res: Response) => {
   const { images } = req.body;
@@ -50,7 +51,7 @@ export const deletingImages = (req: Request, res: Response) => {
           return res.status(400).send({ error_en: err.message });
         } else {
           return res
-            .status(200)
+            .status(StatusCodes.OK)
             .send({ success_en: 'Image deleted Successfully' });
         }
       });

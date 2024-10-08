@@ -1,5 +1,6 @@
 import * as express from 'express';
 import {
+  allUsers,
   changePassword,
   emailVerify,
   signIn,
@@ -12,6 +13,8 @@ import {
   signupSchema,
 } from './user.validation.js';
 import { auth } from '../../middleware/auth.js';
+import { Role } from './user.interface.js';
+import { allowedTo } from '../../middleware/allowedTo.middleware.js';
 
 const router = express.Router();
 
@@ -24,5 +27,14 @@ router.patch(
   changePassword,
 );
 router.get('/verify/:token', emailVerify);
+
+router
+  .route('/')
+  .all(auth, allowedTo(Role.SuperAdmin, Role.Admin))
+  .post
+  // validation(symptomSchema, 'body'),
+  // addNewSymptom,
+  ()
+  .get(allUsers);
 
 export const userRouter = router;

@@ -13,6 +13,12 @@ const doctorSchema = new Schema<Doctor>(
       required: true,
       trim: true,
     },
+    symptoms: [
+      {
+        type: SchemaTypes.ObjectId,
+        ref: 'Symptom',
+      },
+    ],
     rating: {
       type: Number,
       required: true,
